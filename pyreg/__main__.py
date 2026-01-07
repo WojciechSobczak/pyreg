@@ -1,7 +1,7 @@
 import argparse
+import sys
 import pyreg.diff
 import os
-import pyreg._key_data_types_generator
 
 def save_to_file(file_path: str, dump: pyreg.diff.RegistryDump | pyreg.diff.Key):
     print(f"File specified: {file_path}. Saving...")
@@ -39,20 +39,25 @@ def dump_key(key_path: str) -> pyreg.diff.Key | None:
     
    
 def main():
-    parser = argparse.ArgumentParser(description="pyreg project playground")
-    parser.add_argument('-gk', '--generate-key-data-types', action='store_true', help="Generate KeyDataType enumeration from pyreg/key_data_types.json")
+    parser = argparse.ArgumentParser(description="python windows registry utilities")
+    if False: # For development purposes
+        parser.add_argument('-gk', '--generate-key-data-types', action='store_true', help="Generate KeyDataType enumeration from pyreg/key_data_types.json")
     parser.add_argument('-dr', '--dump-registry', action='store_true', help="Dump registry to a file or print if none specified")
     parser.add_argument('-dk', '--dump-key', type=str, help="Dump registry key to file or print if none specified")
     parser.add_argument('--diff',  action='store_true', help="Generate diff between two keys or registries")
     parser.add_argument('-o',  '--output-file', type=str, default=None, help="Dump file path")
     
-    args = parser.parse_args()
+    args = parser.parse_args(args = None if sys.argv[1:] else ['--help'])
+    if len(args) == 0:
+        parser.print_help()
+        return 0
 
     file_path = args.output_file
     if file_path is not None:
         file_path = os.path.realpath(file_path)
 
-    if args.generate_key_data_types and not args.diff:
+    if False and args.generate_key_data_types: # For development purposes
+        import pyreg._key_data_types_generator
         pyreg._key_data_types_generator.generate_key_data_types()
 
     if args.dump_registry and not args.diff:
@@ -145,4 +150,4 @@ def main():
         print(f"[Info] Diff saved to {file_path}")
 
 if __name__ == "__main__":
-    main()
+    exit(main())

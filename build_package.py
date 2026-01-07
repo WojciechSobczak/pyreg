@@ -18,7 +18,7 @@ def main():
         print(f"[ERROR] Building package failed. Process code: {proc.returncode}")
         return 1
     
-    shutil.move(f'{SCRIPT_DIR}/pyreg.egg-info', f'{BUILD_DIR}/pyreg.egg-info')
+    shutil.move(f'{SCRIPT_DIR}/wpyreg.egg-info', f'{BUILD_DIR}/wpyreg.egg-info')
     shutil.move(f'{SCRIPT_DIR}/build', f'{BUILD_DIR}/build')
 
 

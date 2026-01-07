@@ -3,7 +3,7 @@ requires = ["wheel", "setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "pyreg"
+name = "wpyreg"
 version = "0.0.0"
 requires-python = ">=3.10"
 description = "python library for handling windows registry with some additional features"
@@ -18,11 +18,11 @@ maintainers = [
 keywords = ["windows", "registry"]
 
 [project.scripts]
-pyreg = "pyreg.__main__:main"
+pyreg = "wpyreg.__main__:main"
 
 
 [project.urls]
-Homepage = "https://github.com/WojciechSobczak/pyreg"
-Documentation = "https://github.com/WojciechSobczak/pyreg"
-Repository = "https://github.com/WojciechSobczak/pyreg.git"
-Issues = "https://github.com/WojciechSobczak/pyreg/issues"
+Homepage = "https://github.com/WojciechSobczak/wpyreg"
+Documentation = "https://github.com/WojciechSobczak/wpyreg"
+Repository = "https://github.com/WojciechSobczak/wpyreg.git"
+Issues = "https://github.com/WojciechSobczak/wpyreg/issues"

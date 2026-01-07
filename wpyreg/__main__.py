@@ -1,9 +1,9 @@
 import argparse
 import sys
-import pyreg.diff
+import wpyreg.diff
 import os
 
-def save_to_file(file_path: str, dump: pyreg.diff.RegistryDump | pyreg.diff.Key):
+def save_to_file(file_path: str, dump: wpyreg.diff.RegistryDump | wpyreg.diff.Key):
     print(f"File specified: {file_path}. Saving...")
     if file_path.endswith(".pkl") or file_path.endswith(".pickle"):
         with open(file_path, 'wb') as file:
@@ -15,16 +15,16 @@ def save_to_file(file_path: str, dump: pyreg.diff.RegistryDump | pyreg.diff.Key)
     return None
 
 
-def dump_registry() -> pyreg.diff.RegistryDump:
+def dump_registry() -> wpyreg.diff.RegistryDump:
     print("Dumping registry...")
-    dump = pyreg.diff.dump_registry(True, True)
+    dump = wpyreg.diff.dump_registry(True, True)
     print("Dump finished.")
 
     return dump
 
-def dump_key(key_path: str) -> pyreg.diff.Key | None:
+def dump_key(key_path: str) -> wpyreg.diff.Key | None:
     print(f"Dumping key: {key_path}...")
-    dump = pyreg.diff.dump_key(key_path, True, True)
+    dump = wpyreg.diff.dump_key(key_path, True, True)
     print(f"Dump finished.")
 
     if dump is None:
@@ -39,7 +39,7 @@ def dump_key(key_path: str) -> pyreg.diff.Key | None:
     
    
 def main():
-    parser = argparse.ArgumentParser(description="python windows registry utilities")
+    parser = argparse.ArgumentParser(description="Wojciech's Python Windows Registry Utilities ")
     if False: # For development purposes
         parser.add_argument('-gk', '--generate-key-data-types', action='store_true', help="Generate KeyDataType enumeration from pyreg/key_data_types.json")
     parser.add_argument('-dr', '--dump-registry', action='store_true', help="Dump registry to a file or print if none specified")
@@ -58,7 +58,7 @@ def main():
 
     if False and args.generate_key_data_types: # For development purposes
         import pyreg._key_data_types_generator
-        pyreg._key_data_types_generator.generate_key_data_types()
+        wpyreg._key_data_types_generator.generate_key_data_types()
 
     if args.dump_registry and not args.diff:
         reg_dump = dump_registry()
@@ -71,8 +71,8 @@ def main():
             save_to_file(file_path, key)
 
     if args.diff:
-        before: pyreg.diff.Key | pyreg.diff.RegistryDump | None
-        after: pyreg.diff.Key | pyreg.diff.RegistryDump | None
+        before: wpyreg.diff.Key | wpyreg.diff.RegistryDump | None
+        after: wpyreg.diff.Key | wpyreg.diff.RegistryDump | None
         if args.dump_key:
             before = dump_key(args.dump_key)
             input("Do action with registry and press enter.")
@@ -91,26 +91,26 @@ def main():
             print("[ERROR] after dump has error")
             return
 
-        def _traverse_key(key_data: pyreg.diff.Key, output: dict[str, str]):
+        def _traverse_key(key_data: wpyreg.diff.Key, output: dict[str, str]):
             for value in key_data.values:
                 output[f'{key_data.full_path()}'] = value.to_string()
             for _, key in key_data.children.items():
                 _traverse_key(key, output)
 
-        def _generate_paths_set(diff_data: dict[str, pyreg.diff.Key]):
+        def _generate_paths_set(diff_data: dict[str, wpyreg.diff.Key]):
             output: dict[str, str] = {}
             for _, value in diff_data.items():
                 _traverse_key(value, output)
             return output
         
-        before_diff_data: dict[str, pyreg.diff.Key] = {}
-        if isinstance(before, pyreg.diff.RegistryDump):
+        before_diff_data: dict[str, wpyreg.diff.Key] = {}
+        if isinstance(before, wpyreg.diff.RegistryDump):
             before_diff_data = before.get_filtered_tree()
         else:
             before_diff_data = { before.name: before }
 
-        after_diff_data: dict[str, pyreg.diff.Key] = {}
-        if isinstance(after, pyreg.diff.RegistryDump):
+        after_diff_data: dict[str, wpyreg.diff.Key] = {}
+        if isinstance(after, wpyreg.diff.RegistryDump):
             after_diff_data = after.get_filtered_tree()
         else:
             after_diff_data = { after.name: after }
